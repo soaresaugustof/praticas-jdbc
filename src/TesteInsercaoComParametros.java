@@ -7,24 +7,20 @@ import java.sql.Statement;
 public class TesteInsercaoComParametros {
     public static void main(String[] args) throws SQLException {
 	ConnectionFactory factory = new ConnectionFactory();
-	Connection con = factory.recuperarConexao();
-	con.setAutoCommit(false);
+	try (Connection con = factory.recuperarConexao()) {
+	    con.setAutoCommit(false);
 
-	try {
-	    PreparedStatement stm = con.prepareStatement("insert into produto (nome, descricao) values (?, ?)",
-		    Statement.RETURN_GENERATED_KEYS);
+	    try (PreparedStatement stm = con.prepareStatement("insert into produto (nome, descricao) values (?, ?)",
+		    Statement.RETURN_GENERATED_KEYS)) {
+		adicionarVariavel("SmartTV", "50 polegadas", stm);
+		adicionarVariavel("Celular", "Celular Samsung", stm);
 
-	    adicionarVariavel("SmartTV", "50 polegadas", stm);
-	    adicionarVariavel("Celular", "Celular Samsung", stm);
-
-	    con.commit();
-
-	    stm.close();
-	    con.close();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    System.out.println("Rollback executado");
-	    con.rollback();
+		con.commit();
+	    } catch (Exception e) {
+		e.printStackTrace();
+		System.out.println("Rollback executado");
+		con.rollback();
+	    }
 	}
     }
 
@@ -38,12 +34,12 @@ public class TesteInsercaoComParametros {
 
 	stm.execute();
 
-	ResultSet rst = stm.getGeneratedKeys();
-	while (rst.next()) {
-	    Integer id = rst.getInt(1);
-	    System.out.println("Produto de id " + id + " criado");
+	try (ResultSet rst = stm.getGeneratedKeys()) {
+	    while (rst.next()) {
+		Integer id = rst.getInt(1);
+		System.out.println("Produto de id " + id + " criado");
+	    }
 	}
-	rst.close();
     }
 
 }
