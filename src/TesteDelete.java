@@ -14,5 +14,6 @@ public class TesteDelete {
 	Integer linhasModificadas = stm.getUpdateCount();
 
 	System.out.println("Quantidade de linhas modificadas: " + linhasModificadas);
+	stm.close();
     }
 }

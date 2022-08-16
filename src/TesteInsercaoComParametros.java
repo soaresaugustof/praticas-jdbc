@@ -6,16 +6,36 @@ import java.sql.Statement;
 
 public class TesteInsercaoComParametros {
     public static void main(String[] args) throws SQLException {
-	String nome = "MOUSE'";
-	String descricao = "MOUSE SEM FIO";
 	ConnectionFactory factory = new ConnectionFactory();
 	Connection con = factory.recuperarConexao();
+	con.setAutoCommit(false);
 
-	PreparedStatement stm = con.prepareStatement("insert into produto (nome, descricao) values (?, ?)",
-		Statement.RETURN_GENERATED_KEYS);
+	try {
+	    PreparedStatement stm = con.prepareStatement("insert into produto (nome, descricao) values (?, ?)",
+		    Statement.RETURN_GENERATED_KEYS);
 
+	    adicionarVariavel("SmartTV", "50 polegadas", stm);
+	    adicionarVariavel("Celular", "Celular Samsung", stm);
+
+	    con.commit();
+
+	    stm.close();
+	    con.close();
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    System.out.println("Rollback executado");
+	    con.rollback();
+	}
+    }
+
+    private static void adicionarVariavel(String nome, String descricao, PreparedStatement stm) throws SQLException {
 	stm.setString(1, nome);
 	stm.setString(2, descricao);
+
+	if (nome.equalsIgnoreCase("Celular")) {
+	    throw new RuntimeException("Não foi possível adicionar o produto.");
+	}
+
 	stm.execute();
 
 	ResultSet rst = stm.getGeneratedKeys();
@@ -23,6 +43,7 @@ public class TesteInsercaoComParametros {
 	    Integer id = rst.getInt(1);
 	    System.out.println("Produto de id " + id + " criado");
 	}
+	rst.close();
     }
 
 }

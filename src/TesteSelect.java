@@ -20,6 +20,7 @@ public class TesteSelect {
 	    String descricao = rst.getString("descricao");
 	    System.out.println(descricao);
 	}
+	rst.close();
     }
 
 }
