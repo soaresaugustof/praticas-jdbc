@@ -15,6 +15,8 @@ public class ConnectionFactory {
 	cpds.setUser("postgres");
 	cpds.setPassword("mEZCdzyvpB");
 
+	cpds.setMaxPoolSize(15);
+
 	this.dataSource = cpds;
     }
 
