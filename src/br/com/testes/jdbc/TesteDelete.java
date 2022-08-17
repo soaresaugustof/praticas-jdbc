@@ -10,7 +10,7 @@ public class TesteDelete {
 	Connection connection = factory.recuperarConexao();
 
 	PreparedStatement stm = connection.prepareStatement("delete from produto where id > ?");
-	stm.setInt(1, 2);
+	stm.setInt(1, 0);
 	stm.execute();
 
 	Integer linhasModificadas = stm.getUpdateCount();

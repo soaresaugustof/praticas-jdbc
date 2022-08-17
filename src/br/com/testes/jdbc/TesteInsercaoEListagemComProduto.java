@@ -2,22 +2,23 @@ package br.com.testes.jdbc;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import br.com.testes.jdbc.dao.ProdutoDAO;
 import br.com.testes.jdbc.modelo.Produto;
 
-public class TesteInsercaoComProduto {
+public class TesteInsercaoEListagemComProduto {
 
     public static void main(String[] args) throws SQLException {
 
-	Produto produto = new Produto("CÔMODA", "CÔMODA VERTICAL");
+	Produto produto = new Produto("CELULAR", "CELULAR SAMSUNG");
 
 	try (Connection connection = new ConnectionFactory().recuperarConexao()) {
 	    ProdutoDAO produtoDAO = new ProdutoDAO(connection);
 	    produtoDAO.salvar(produto);
-	    // produtoDAO.listar();
+	    List<Produto> listaProdutos = produtoDAO.listar();
+	    listaProdutos.stream().forEach(lp -> System.out.println(lp));
 	}
-	System.out.println(produto);
     }
 
 }
