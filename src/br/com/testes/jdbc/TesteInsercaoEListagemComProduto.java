@@ -11,7 +11,7 @@ public class TesteInsercaoEListagemComProduto {
 
     public static void main(String[] args) throws SQLException {
 
-	Produto produto = new Produto("CELULAR", "CELULAR SAMSUNG");
+	Produto produto = new Produto("MOUSE", "MOUSE SEM FIO");
 
 	try (Connection connection = new ConnectionFactory().recuperarConexao()) {
 	    ProdutoDAO produtoDAO = new ProdutoDAO(connection);
