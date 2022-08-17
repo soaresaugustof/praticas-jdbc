@@ -1,3 +1,5 @@
+package br.com.testes.jdbc;
+
 import java.sql.SQLException;
 
 public class TesteConnectionPool {
